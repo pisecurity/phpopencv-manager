@@ -13,16 +13,17 @@ if [ ! -d /opt/pisecurity-3rdparty/php-opencv ]; then
 	CFLAGS="-s -O2" CXXFLAGS="-s -O2" ./configure --with-opencv
 fi
 
-cd /opt/pisecurity-3rdparty/php-opencv
-make
-make install
+if [ ! -f /opt/pisecurity-3rdparty/php-opencv/.libs/opencv.so ]; then
+	cd /opt/pisecurity-3rdparty/php-opencv
+	make
+	make install
+fi
 
 for phpver in `ls /etc/php`; do
 	file=/etc/php/$phpver/mods-available/opencv.ini
 	if [ ! -f $file ]; then
 		echo "; priority=20" >$file
 		echo "extension=opencv.so" >>$file
+		phpenmod opencv
 	fi
 done
-
-phpenmod opencv
