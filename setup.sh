@@ -1,5 +1,10 @@
 #!/bin/sh
 
+if [ -f /etc/friendlyelec-release ]; then
+	echo "OpenCV is not supported on this platform"
+	exit 0
+fi
+
 /opt/pisecurity/opencv-manager/install-release.sh 3.4.1
 
 apt-get install php-cli php-dev
